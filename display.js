@@ -53,7 +53,13 @@ argunpx.display = function() {
     var Painter = function(canvas, image, width, height) {
         canvas.width = width * tileHeight;
         canvas.height = height * tileWidth;
+
         var context = canvas.getContext("2d");
+        context.textBaseline = "middle";
+        context.textAlign = "left";
+        // Note: text may not appear until font has been loaded.
+        // See: https://bugs.webkit.org/show_bug.cgi?id=33998
+        context.font = "16px kongtext";
 
         this.draw = function(idx, x, y) {
             var sx = (idx % sheetWidth) * tileWidth;
@@ -69,6 +75,18 @@ argunpx.display = function() {
                 for (var y = 0; y < height; ++y) {
                     this.draw(idx, x, y);
                 }
+            }
+        }
+
+        this.text = function(str, x, y) {
+            var len = str.length;
+            var px = x * tileWidth;
+            // Add half a tile to because the font is centered vertically.
+            var py = y * tileHeight + tileHeight / 2;
+            // Write the string one char at a time to force monospacing.
+            for (var i = 0; i < len; ++i) {
+                context.fillText(str.charAt(i), px, py);
+                px += tileWidth;
             }
         }
     }
