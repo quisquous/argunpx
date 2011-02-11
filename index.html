@@ -1,0 +1,21 @@
+<html>
+<head>
+    <script src="display.js"></script>
+<script>
+    var image = new Image();
+    image.onload = function() {
+        var canvas = document.getElementById("canvas");
+        var w = 50;
+        var h = 28;
+        var paint = new argunpx.display.Painter(canvas, this, w, h);
+        paint.clear(argunpx.display.tile.floor1);
+        paint.draw(argunpx.display.tile.you, 0, 0);
+        paint.draw(argunpx.display.tile.potion_first, 2, 4);
+    }
+    image.src = "nhtiles.png";
+</script>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+</html>
