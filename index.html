@@ -1,21 +1,20 @@
 <html>
 <head>
+    <script src="argunpx.js"></script>
     <script src="display.js"></script>
-<script>
-    var image = new Image();
-    image.onload = function() {
-        var canvas = document.getElementById("canvas");
-        var w = 50;
-        var h = 28;
-        var paint = new argunpx.display.Painter(canvas, this, w, h);
-        paint.clear(argunpx.display.tile.floor1);
-        paint.draw(argunpx.display.tile.you, 0, 0);
-        paint.draw(argunpx.display.tile.potion_first, 2, 4);
-    }
-    image.src = "nhtiles.png";
-</script>
+    <script src="loader.js"></script>
+    <script src="game.js"></script>
+
+    <script>
+        function startGame() {
+            argunpx.loader.load(function() {
+                var canvas = document.getElementById("game");
+                argunpx.game.start(canvas, argunpx.loader);
+            });
+        }
+    </script>
 </head>
-<body>
-    <canvas id="canvas"></canvas>
+<body onload="startGame()">
+    <canvas id="game"></canvas>
 </body>
 </html>

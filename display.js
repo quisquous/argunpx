@@ -1,5 +1,3 @@
-var argunpx = {};
-
 argunpx.display = function() {
     var tileWidth = 16;
     var tileHeight = 16;
