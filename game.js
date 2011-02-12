@@ -11,7 +11,9 @@ argunpx.game = function() {
     function loop() {
         requestAnimationFrame(loop);
 
-        paint.text("foobar", 5, 5, "white", "black");
+        paint.text("abcdefghijklmnopqrstuvwxyz", 0, 1, "white", "black");
+        paint.text("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, 3, "white", "black");
+        paint.text("1234567890!@#$%^&*()-=[]{}", 0, 5, "white", "black");
     }
 
     var start = function(canvas, loader) {
