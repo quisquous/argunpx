@@ -55,7 +55,7 @@ argunpx.display = function() {
         canvas.height = height * tileWidth;
 
         var context = canvas.getContext("2d");
-        context.textBaseline = "middle";
+        context.textBaseline = "top";
         context.textAlign = "left";
         // Note: text may not appear until font has been loaded.
         // See: https://bugs.webkit.org/show_bug.cgi?id=33998
@@ -90,8 +90,7 @@ argunpx.display = function() {
                 this.fill(bgcolor, x, y, len, 1);
             context.fillStyle = fgcolor;
             var px = x * tileWidth;
-            // Add half a tile to because the font is centered vertically.
-            var py = y * tileHeight + tileHeight / 2;
+            var py = y * tileHeight;
             // Write the string one char at a time to force monospacing.
             for (var i = 0; i < len; ++i) {
                 context.fillText(str.charAt(i), px, py);
