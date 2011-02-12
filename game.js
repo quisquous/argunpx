@@ -1,7 +1,16 @@
 argunpx.game = function() {
     var paint;
 
+    function requestAnimationFrame(callback) {
+        if (window.webkitRequestAnimationFrame)
+            window.webkitRequestAnimationFrame(callback);
+        else
+            setTimeout(loop, 30);
+    }
+
     function loop() {
+        requestAnimationFrame(loop);
+
         paint.text("foobar", 5, 5);
     }
 
@@ -12,7 +21,7 @@ argunpx.game = function() {
         paint.draw(argunpx.display.tile.you, 0, 0);
         paint.draw(argunpx.display.tile.potion_first, 2, 4);
 
-        setTimeout(loop, 100);
+        requestAnimationFrame(loop);
     };
 
     return {
