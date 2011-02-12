@@ -78,8 +78,17 @@ argunpx.display = function() {
             }
         }
 
-        this.text = function(str, x, y) {
+        this.fill = function(fillColor, x, y, w, h) {
+            context.fillStyle = fillColor; 
+            context.fillRect(x * tileWidth, y * tileHeight,
+                w * tileWidth, h * tileHeight);
+        }
+
+        this.text = function(str, x, y, fgcolor, bgcolor) {
             var len = str.length;
+            if (bgcolor)
+                this.fill(bgcolor, x, y, len, 1);
+            context.fillStyle = fgcolor;
             var px = x * tileWidth;
             // Add half a tile to because the font is centered vertically.
             var py = y * tileHeight + tileHeight / 2;
