@@ -3,13 +3,17 @@
     <link type="text/css" href="argunpx.css" rel="stylesheet" />
     <script src="argunpx.js"></script>
     <script src="display.js"></script>
+    <script src="input.js"></script>
     <script src="loader.js"></script>
+    <script src="menu.js"></script>
     <script src="game.js"></script>
 
     <script>
         function startGame() {
             argunpx.loader.load(function() {
                 var canvas = document.getElementById("game");
+                window.addEventListener("keypress", argunpx.input.keyPressListener);
+                window.addEventListener("keydown", argunpx.input.keyDownListener);
                 argunpx.game.start(canvas, argunpx.loader);
             });
         }

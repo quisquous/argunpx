@@ -97,6 +97,45 @@ argunpx.display = function() {
                 px += tileWidth;
             }
         }
+
+        this.formatText = function(str, startx, starty, fgcolor, bgcolor) {
+            var len = str.length;
+            var idx = 0;
+            var x = startx;
+            var y = starty;
+            var space = undefined;
+            while (y < height && idx < len) {
+                var c = str.charAt(idx++);
+                if (c == '\n') {
+                    x = startx;
+                    y++;
+                    space = undefined;
+                } else {
+                    this.text(c, x, y, fgcolor, bgcolor);
+                    x++;
+                }
+
+                if (str.charAt(idx) == ' ')
+                    space = idx;
+
+                if (x >= width - 1) {
+                    if (space) {
+                        this.fill(bgcolor, x - idx + space , y, width, 1);
+                        idx = space + 1;
+                        space = undefined;
+                    }
+                    x = startx;
+                    y++;
+
+                    while (idx < len && str.charAt(idx) == ' ')
+                        idx++;
+                }
+            }
+        }
+
+        this.clearScreen = function() {
+            this.fill("black", 0, 0, width, height);
+        }
     }
 
     return {

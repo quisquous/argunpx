@@ -68,6 +68,18 @@ argunpx.input = function() {
         inputHandler = handler;
     }
 
+    var more = function(postFunc) {
+        var realInput = function(e) {
+            if (!e.chr)
+                return realInput;
+            else if (postFunc)
+                return postFunc();
+            else
+                return undefined;
+        }
+        return realInput;
+    }
+
     return {
         keyDownListener: keyDownListener,
         keyPressListener: keyPressListener,
@@ -76,5 +88,6 @@ argunpx.input = function() {
         // This function receives a key and returns the next input handler.
         // If nothing returned, go back to default input handling.
         get: get,
+        more: more,
     };
 }();
