@@ -1,5 +1,5 @@
 argunpx.game = function() {
-    var paint;
+    var display;
 
     function requestAnimationFrame(callback) {
         if (window.webkitRequestAnimationFrame)
@@ -16,23 +16,28 @@ argunpx.game = function() {
         if (firstTime) {
             var menu = argunpx.menu;
             var tempDrawScreen = function() {
-                paint.clear(argunpx.display.tile.floor1);
-                paint.draw(argunpx.display.tile.you, 0, 0);
-                paint.draw(argunpx.display.tile.potion_first, 2, 4);
+                display.message.add("Welcome...");
+                display.dungeon.clear(display.dungeon.tile.floor1);
+                display.dungeon.draw(display.dungeon.tile.you, 0, 0);
+                display.dungeon.draw(display.dungeon.tile.potion_first, 2, 4);
+                display.stat.update();
             }
 
+/*
             // TODO enne - need way more syntactic sugar here
             argunpx.input.get(menu.startMenu(paint, argunpx.input, function() {
                 return menu.introScreen(paint, argunpx.input, tempDrawScreen);
             }));
+*/
+
+            tempDrawScreen();
 
             firstTime = false;
         }
-
     }
 
-    var start = function(canvas, loader) {
-        paint = new argunpx.display.Painter(canvas, loader.tileSheet, argunpx.width, argunpx.height);
+    var start = function(container, loader) {
+        display = new argunpx.display.Display(container, loader.tileSheet, argunpx.width, argunpx.height);
 
         requestAnimationFrame(loop);
     };

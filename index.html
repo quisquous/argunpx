@@ -11,16 +11,16 @@
     <script>
         function startGame() {
             argunpx.loader.load(function() {
-                var canvas = document.getElementById("game");
+                var container = document.getElementById("game");
                 window.addEventListener("keypress", argunpx.input.keyPressListener);
                 window.addEventListener("keydown", argunpx.input.keyDownListener);
-                argunpx.game.start(canvas, argunpx.loader);
+                argunpx.game.start(container, argunpx.loader);
             });
         }
     </script>
 </head>
 <body onload="startGame()">
-    <canvas id="game"></canvas>
-    <p style="font:16px kongtext;">Custom font</p>
+    <p style="font:16px kongtext;">Argun (PX)</p>
+    <div id="game"></div>
 </body>
 </html>

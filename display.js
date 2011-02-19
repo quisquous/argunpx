@@ -50,10 +50,8 @@ argunpx.display = function() {
         mon_pudding: tileidx(10, 5),
     };
 
-    var Painter = function(canvas, image, width, height) {
-        canvas.width = width * tileHeight;
-        canvas.height = height * tileWidth;
-
+    // A tile-based interface to a canvas for drawing text, tiles, and colors.
+    var Painter = function(canvas, image) {
         var context = canvas.getContext("2d");
         context.textBaseline = "top";
         context.textAlign = "left";
@@ -61,7 +59,7 @@ argunpx.display = function() {
         // See: https://bugs.webkit.org/show_bug.cgi?id=33998
         context.font = "16px kongtext";
 
-        this.draw = function(idx, x, y) {
+        this.drawTile = function(idx, x, y) {
             var sx = (idx % sheetWidth) * tileWidth;
             var sy = Math.floor(idx / sheetWidth) * tileHeight;
             var ex = x * tileWidth;
@@ -70,24 +68,16 @@ argunpx.display = function() {
                 ex, ey, tileWidth, tileHeight);
         }
 
-        this.clear = function(idx) {
-            for (var x = 0; x < width; ++x) {
-                for (var y = 0; y < height; ++y) {
-                    this.draw(idx, x, y);
-                }
-            }
-        }
-
-        this.fill = function(fillColor, x, y, w, h) {
+        this.fillColor = function(fillColor, x, y, w, h) {
             context.fillStyle = fillColor; 
             context.fillRect(x * tileWidth, y * tileHeight,
                 w * tileWidth, h * tileHeight);
         }
 
-        this.text = function(str, x, y, fgcolor, bgcolor) {
+        this.drawText = function(str, x, y, fgcolor, bgcolor) {
             var len = str.length;
             if (bgcolor)
-                this.fill(bgcolor, x, y, len, 1);
+                this.fillColor(bgcolor, x, y, len, 1);
             context.fillStyle = fgcolor;
             var px = x * tileWidth;
             var py = y * tileHeight;
@@ -97,21 +87,46 @@ argunpx.display = function() {
                 px += tileWidth;
             }
         }
+    }
 
-        this.formatText = function(str, startx, starty, fgcolor, bgcolor) {
+    var TextArea = function(painter, x1, y1, x2, y2) {
+        this.fgcolor = "white";
+        this.bgcolor = "black";
+
+        var width = x2 - x1;
+        var height = y2 - y1;
+
+        function inBounds(x, y) {
+            return x >= x1 && x <= x2 && y >= y1 && y <= y2;
+        }
+
+        this.clear = function() {
+            painter.fillColor(this.bgcolor, x1, y1, x2 - x1, y2 - y1);
+        }
+
+        this.text = function(str, x, y) {
+            var worldX = x + x1;
+            var worldY = y + y1;
+            if (!inBounds(worldX, worldY))
+                return;
+            painter.drawText(str, worldX, worldY, this.fgcolor, this.bgcolor);
+        }
+
+        this.formatText = function(str, startX, startY, endX, endY) {
             var len = str.length;
             var idx = 0;
-            var x = startx;
-            var y = starty;
+            var x = startX;
+            var y = startY;
+             
             var space = undefined;
             while (y < height && idx < len) {
                 var c = str.charAt(idx++);
                 if (c == '\n') {
-                    x = startx;
+                    x = startX;
                     y++;
                     space = undefined;
                 } else {
-                    this.text(c, x, y, fgcolor, bgcolor);
+                    this.text(c, x, y);
                     x++;
                 }
 
@@ -120,11 +135,14 @@ argunpx.display = function() {
 
                 if (x >= width - 1) {
                     if (space) {
-                        this.fill(bgcolor, x - idx + space , y, width, 1);
+                        var lastWord = x - idx + space;
+                        var end = x2 - lastWord;
+                        if (inBounds(x1 + lastWord, y1 + y))
+                            painter.fillColor(bgcolor, x1 + lastWord, y1 + y, end, 1);
                         idx = space + 1;
                         space = undefined;
                     }
-                    x = startx;
+                    x = startX;
                     y++;
 
                     while (idx < len && str.charAt(idx) == ' ')
@@ -132,15 +150,89 @@ argunpx.display = function() {
                 }
             }
         }
+    }
 
-        this.clearScreen = function() {
-            this.fill("black", 0, 0, width, height);
+    var MessageArea = function(textArea) {
+        textArea.clear();
+
+        this.add = function(str) {
+            textArea.clear();
+            textArea.formatText(str, 0, 0);
         }
     }
 
+    var StatArea = function(textArea) {
+        textArea.clear();
+
+        this.update = function() {
+            textArea.clear();
+            textArea.formatText("I am a stat area", 0, 0);
+        }
+    }
+
+    var DungeonArea = function(painter, x1, y1, x2, y2) {
+        this.tile = tile;
+
+        var width = x2 - x1;
+        var height = y2 - y1;
+
+        this.clear = function(idx) {
+            for (var x = 0; x < width; ++x) {
+                for (var y = 0; y < height; ++y) {
+                    this.draw(idx, x, y);  
+                }
+            }
+        }
+
+        function inBounds(x, y) {
+            return x >= x1 && x <= x2 && y >= y1 && y <= y2;
+        }
+
+        this.draw = function(idx, x, y) {
+            var worldX = x + x1;
+            var worldY = y + y1;
+            if (!inBounds(worldX, worldY))
+                return;
+            painter.drawTile(idx, worldX, worldY);
+        }
+    }
+
+    var Display = function(container, image, width, height) {
+        var canvasWidth = width * tileWidth;
+        var canvasHeight = height * tileHeight;
+
+        container.width = canvasWidth;
+        container.height = canvasHeight;
+
+        var dungeonCanvas = document.createElement("canvas");
+        dungeonCanvas.width = canvasWidth;
+        dungeonCanvas.height = canvasHeight;
+        dungeonCanvas.style = "position: absolute;";
+        container.appendChild(dungeonCanvas);
+
+        var menuCanvas = document.createElement("canvas");
+        menuCanvas.width = canvasWidth;
+        menuCanvas.height = canvasHeight;
+        menuCanvas.style = "position: absolute;";
+        //container.appendChild(menuCanvas);
+
+        var dungeonPainter = new Painter(dungeonCanvas, image);
+        var menuPainter = new Painter(dungeonCanvas, image);
+
+        var statHeight = 2;
+        var messageHeight = 5;
+
+        this.message = new MessageArea(new TextArea(dungeonPainter, 0, 0, width, messageHeight + 1));
+        this.dungeon = new DungeonArea(dungeonPainter, 0, messageHeight + 1, width, height - statHeight);
+        this.stat = new StatArea(new TextArea(dungeonPainter, 0, height - statHeight, width, height));
+
+        this.setMenu = function(menu) {
+        } 
+    }
+
     return {
-        Painter : Painter,
-        tile : tile,
+        Display: Display,
+        TextArea: TextArea,
     }
 }();
 
