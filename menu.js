@@ -104,7 +104,7 @@ argunpx.menu = function() {
         }
 
         this.input = function(e) {
-            if (e.chr)
+            if (e.chr || e.spc == "escape")
                 this.done = true;
         };
     }

@@ -27,6 +27,7 @@ argunpx.input = function() {
             case 8: return "backspace";
             case 9: return "tab";
             case 13: return "enter";
+            case 27: return "escape";
             case 33: return "pgup";
             case 34: return "pgdown";
             case 37: return "left";
