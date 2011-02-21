@@ -54,12 +54,14 @@ argunpx.game = function() {
         return undefined;
     }    
 
+    var tempMessage = 0;
     function defaultInput(e) {
         var move = translateToMovement(e);
         if (move) {
             you.x += move.x;
             you.y += move.y;
-        }
+        } else if (e.chr == 't')
+            display.message.add("Testing: " + tempMessage++);
         drawScreen();
     }
 

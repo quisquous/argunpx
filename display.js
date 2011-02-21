@@ -100,6 +100,9 @@ argunpx.display = function() {
         var width = x2 - x1;
         var height = y2 - y1;
 
+        this.width = function() { return width; }
+        this.height = function() { return height; }
+
         function inBounds(x, y) {
             return x >= x1 && x <= x2 && y >= y1 && y <= y2;
         }
@@ -159,9 +162,15 @@ argunpx.display = function() {
     var MessageArea = function(textArea) {
         textArea.clear();
 
+        var messages = [];
+
         this.add = function(str) {
             textArea.clear();
-            textArea.formatText(str, 0, 0);
+            messages.push(str);
+            if (messages.length > textArea.height())
+                messages.shift();
+            for (var i = 0; i < messages.length; ++i)
+                textArea.formatText(messages[i], 0, i);
         }
     }
 
@@ -179,6 +188,9 @@ argunpx.display = function() {
 
         var width = x2 - x1;
         var height = y2 - y1;
+
+        this.width = function() { return width; }
+        this.height = function() { return height; }
 
         this.clear = function(idx) {
             for (var x = 0; x < width; ++x) {
