@@ -239,6 +239,7 @@ argunpx.display = function() {
     return {
         Display: Display,
         TextArea: TextArea,
+        tile: tile,
     }
 }();
 

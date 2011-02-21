@@ -1,7 +1,7 @@
 argunpx.game = function() {
     var display;
     var firstTime = true;
-    var you = {x:0, y:0};
+    var you = new argunpx.actor.Player();
 
     function requestAnimationFrame(callback) {
         if (window.webkitRequestAnimationFrame)
@@ -12,7 +12,7 @@ argunpx.game = function() {
 
     function drawScreen() {
         display.dungeon.clear(display.dungeon.tile.floor1);
-        display.dungeon.draw(display.dungeon.tile.you, you.x, you.y);
+        display.dungeon.draw(you.tile, you.x, you.y);
         display.dungeon.draw(display.dungeon.tile.potion_first, 2, 4);
         display.stat.update();
     }
