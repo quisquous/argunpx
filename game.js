@@ -14,7 +14,6 @@ argunpx.game = function() {
         requestAnimationFrame(loop);
 
         if (firstTime) {
-            var menu = argunpx.menu;
             var tempDrawScreen = function() {
                 display.message.add("Welcome...");
                 display.dungeon.clear(display.dungeon.tile.floor1);
@@ -23,14 +22,11 @@ argunpx.game = function() {
                 display.stat.update();
             }
 
-/*
-            // TODO enne - need way more syntactic sugar here
-            argunpx.input.get(menu.startMenu(paint, argunpx.input, function() {
-                return menu.introScreen(paint, argunpx.input, tempDrawScreen);
-            }));
-*/
-
-            tempDrawScreen();
+            var start = new argunpx.menu.StartMenu(display, argunpx.input);
+            var intro = new argunpx.menu.IntroScreen(display, argunpx.input);
+            start.nextMenu = intro;
+            intro.postFunc = tempDrawScreen;
+            start.begin();
 
             firstTime = false;
         }

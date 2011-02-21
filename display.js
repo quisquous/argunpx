@@ -87,6 +87,10 @@ argunpx.display = function() {
                 px += tileWidth;
             }
         }
+
+        this.clearTransparent = function() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
     }
 
     var TextArea = function(painter, x1, y1, x2, y2) {
@@ -138,7 +142,7 @@ argunpx.display = function() {
                         var lastWord = x - idx + space;
                         var end = x2 - lastWord;
                         if (inBounds(x1 + lastWord, y1 + y))
-                            painter.fillColor(bgcolor, x1 + lastWord, y1 + y, end, 1);
+                            painter.fillColor(this.bgcolor, x1 + lastWord, y1 + y, end, 1);
                         idx = space + 1;
                         space = undefined;
                     }
@@ -198,6 +202,9 @@ argunpx.display = function() {
     }
 
     var Display = function(container, image, width, height) {
+        this.width = width;
+        this.height = height;
+
         var canvasWidth = width * tileWidth;
         var canvasHeight = height * tileHeight;
 
@@ -207,17 +214,19 @@ argunpx.display = function() {
         var dungeonCanvas = document.createElement("canvas");
         dungeonCanvas.width = canvasWidth;
         dungeonCanvas.height = canvasHeight;
-        dungeonCanvas.style = "position: absolute;";
+        dungeonCanvas.style.position = "absolute";
+        dungeonCanvas.style.zIndex = "0";
         container.appendChild(dungeonCanvas);
 
         var menuCanvas = document.createElement("canvas");
         menuCanvas.width = canvasWidth;
         menuCanvas.height = canvasHeight;
-        menuCanvas.style = "position: absolute;";
-        //container.appendChild(menuCanvas);
+        menuCanvas.style.position = "absolute";
+        menuCanvas.style.zIndex = "1";
+        container.appendChild(menuCanvas);
 
         var dungeonPainter = new Painter(dungeonCanvas, image);
-        var menuPainter = new Painter(dungeonCanvas, image);
+        this.menuPainter = new Painter(menuCanvas, image);
 
         var statHeight = 2;
         var messageHeight = 5;
@@ -225,9 +234,6 @@ argunpx.display = function() {
         this.message = new MessageArea(new TextArea(dungeonPainter, 0, 0, width, messageHeight + 1));
         this.dungeon = new DungeonArea(dungeonPainter, 0, messageHeight + 1, width, height - statHeight);
         this.stat = new StatArea(new TextArea(dungeonPainter, 0, height - statHeight, width, height));
-
-        this.setMenu = function(menu) {
-        } 
     }
 
     return {
