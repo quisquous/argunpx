@@ -9,10 +9,15 @@ argunpx.input = function() {
         else
             console.log("KEYDOWN: " + e.spc + "," + e.keyCode + "," + e.shiftKey);
     }
+    
+    var defaultInput = normalInput;
+    function setDefaultInput(func) {
+        defaultInput = func;
+    }
 
     function passToInput(e) {
         if (!inputHandler)
-            inputHandler = normalInput;
+            inputHandler = defaultInput;
         if (e)
             inputHandler = inputHandler(e);
     }
@@ -76,5 +81,6 @@ argunpx.input = function() {
         // This function receives a key and returns the next input handler.
         // If nothing returned, go back to default input handling.
         get: get,
+        setDefaultInput: setDefaultInput,
     };
 }();
