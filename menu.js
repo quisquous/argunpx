@@ -51,6 +51,7 @@ argunpx.menu = function() {
 
         this.init = function() {
             this.output.clear();
+            this.output.fgcolor = "white";
             this.output.text("Argun (PX), Copyright 2005-20XX", 1, 1);
             this.output.text("By Adrienne Walker", 13, 2);
             this.output.text("See license for details", 13, 3);
@@ -60,12 +61,19 @@ argunpx.menu = function() {
 
         var errCount = 0;
         this.input = function(e) {
+            // Note: text may not appear until font has been loaded.
+            // See: https://bugs.webkit.org/show_bug.cgi?id=33998
+            // TODO(enne) - do a pixel test to see if font shows up
+            this.init();        
+
             var k = e.chr.toLowerCase();
             if (k == 'y' || errCount > 5) {
                 this.done = true;
             } else if (k == 'q' || k == 'n' || e.spc == "escape") {
                 this.output.fgcolor = "red";
-                this.output.text("*** INTERNAL ERROR: unhandled key code", 3, 8 + errCount++);
+                errCount++;
+                for (var y = 0; y < errCount; ++y)
+                    this.output.text("*** INTERNAL ERROR: unhandled key code", 3, 8 + y);
             }
         }
     }
