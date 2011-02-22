@@ -2,6 +2,8 @@ argunpx.game = function() {
     var display;
     var firstTime = true;
     var you = new argunpx.actor.Player();
+    var dgn = new argunpx.dungeon.Dungeon();
+    var level = dgn.getLevel("main", 0);
 
     function requestAnimationFrame(callback) {
         if (window.webkitRequestAnimationFrame)
@@ -11,10 +13,15 @@ argunpx.game = function() {
     }
 
     function drawScreen() {
-        display.dungeon.clear(display.dungeon.tile.floor1);
-        display.dungeon.draw(you.tile, you.x, you.y);
-        display.dungeon.draw(display.dungeon.tile.potion_first, 2, 4);
         display.stat.update();
+
+        for (var y = 0; y < argunpx.dungeonHeight; ++y) {
+            for (var x = 0; x < argunpx.dungeonWidth; ++x) {
+                display.dungeon.draw(level.cell(x, y).feat.tile, x, y);
+            }
+        }
+        display.dungeon.draw(display.dungeon.tile.potion_first, 2, 4);
+        display.dungeon.draw(you.tile, you.x, you.y);
     }
 
     function translateToMovement(e) {
@@ -87,7 +94,7 @@ argunpx.game = function() {
     }
 
     var start = function(container, loader) {
-        display = new argunpx.display.Display(container, loader.tileSheet, argunpx.width, argunpx.height);
+        display = new argunpx.display.Display(container, loader.tileSheet, argunpx.canvasWidth, argunpx.messageHeight, argunpx.dungeonHeight, argunpx.statHeight);
 
         requestAnimationFrame(loop);
     };

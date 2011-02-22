@@ -100,6 +100,8 @@ argunpx.display = function() {
         var width = x2 - x1;
         var height = y2 - y1;
 
+        console.log("TextArea: " + [width, height]);
+
         this.width = function() { return width; }
         this.height = function() { return height; }
 
@@ -213,7 +215,9 @@ argunpx.display = function() {
         }
     }
 
-    var Display = function(container, image, width, height) {
+    var Display = function(container, image, width, messageHeight, dungeonHeight, statHeight) {
+        var height = messageHeight + dungeonHeight + statHeight;
+
         this.width = width;
         this.height = height;
 
@@ -240,11 +244,8 @@ argunpx.display = function() {
         var dungeonPainter = new Painter(dungeonCanvas, image);
         this.menuPainter = new Painter(menuCanvas, image);
 
-        var statHeight = 2;
-        var messageHeight = 5;
-
-        this.message = new MessageArea(new TextArea(dungeonPainter, 0, 0, width, messageHeight + 1));
-        this.dungeon = new DungeonArea(dungeonPainter, 0, messageHeight + 1, width, height - statHeight);
+        this.message = new MessageArea(new TextArea(dungeonPainter, 0, 0, width, messageHeight));
+        this.dungeon = new DungeonArea(dungeonPainter, 0, messageHeight, width, messageHeight + dungeonHeight);
         this.stat = new StatArea(new TextArea(dungeonPainter, 0, height - statHeight, width, height));
     }
 
