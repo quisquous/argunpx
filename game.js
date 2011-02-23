@@ -17,7 +17,7 @@ argunpx.game = function() {
 
         for (var y = 0; y < argunpx.dungeonHeight; ++y) {
             for (var x = 0; x < argunpx.dungeonWidth; ++x) {
-                display.dungeon.draw(level.cell(x, y).feat.tile, x, y);
+                display.dungeon.draw(level.cellTile(x, y), x, y);
             }
         }
         display.dungeon.draw(display.dungeon.tile.potion_first, 2, 4);
