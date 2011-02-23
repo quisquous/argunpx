@@ -20,7 +20,6 @@ argunpx.game = function() {
                 display.dungeon.draw(level.cellTile(x, y), x, y);
             }
         }
-        display.dungeon.draw(display.dungeon.tile.potion_first, 2, 4);
         display.dungeon.draw(you.tile, you.x, you.y);
     }
 

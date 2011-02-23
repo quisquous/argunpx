@@ -28,6 +28,7 @@ argunpx.dungeon = function() {
 
         function Cell() {
             this.feat = feature.floor;
+            this.items = [];
             this.featTileOffset = 0;
         }
 
@@ -47,6 +48,10 @@ argunpx.dungeon = function() {
 
         this.cellTile = function(x, y) {
             var cell = cells[cellIdx(x, y)];
+
+            if (cell.items.length > 0)
+                return cell.items[0].tile;
+
             var tile = (cell.feat.idx == feature.wall.idx) ? this.wallBase : cell.feat.tile;
             return tile + cell.featTileOffset;
         }
@@ -129,6 +134,9 @@ argunpx.dungeon = function() {
                     level.cell(x, y).feat = feature.wall;
             }
         }
+
+        level.cell(5, 6).items.push(new argunpx.item.Potion);
+        level.cell(10, 12).items.push(new argunpx.item.Wand);
 
         level.fixupWalls();
         return level;
