@@ -3,6 +3,7 @@ argunpx.actor = function() {
         this.hp = 1;
         this.x = 0;
         this.y = 0;
+        this.items = [];
 
         this.dead = function() {
             return false;

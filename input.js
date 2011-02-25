@@ -63,7 +63,7 @@ argunpx.input = function() {
             return;
         // Don't duplicate input if keyDown will also receive this.
         // TODO enne - this is hacky
-        if (e.keyCode < 48 && e.keyCode != 32)
+        if (e.keyCode < 41 && e.keyCode != 32)
             return;
         e.spc = undefined;
         e.chr = String.fromCharCode(e.keyCode)

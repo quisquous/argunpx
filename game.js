@@ -66,8 +66,19 @@ argunpx.game = function() {
         if (move) {
             you.x += move.x;
             you.y += move.y;
-        } else if (e.chr == 't')
+        } else if (e.chr == 't') {
             display.message.add("Testing: " + tempMessage++);
+        } else if (e.chr == ',') {
+            var cell = level.cell(you.x, you.y);
+            if (cell.items.length == 0) {
+                display.message.add("There is nothing here to pick up.");
+                return;
+            }
+           
+            display.message.add("You toss everything here into your bag."); 
+            you.items = cell.items;
+            cell.items = [];
+        }
         drawScreen();
     }
 
