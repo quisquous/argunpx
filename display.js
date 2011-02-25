@@ -100,8 +100,6 @@ argunpx.display = function() {
         var width = x2 - x1;
         var height = y2 - y1;
 
-        console.log("TextArea: " + [width, height]);
-
         this.width = function() { return width; }
         this.height = function() { return height; }
 
