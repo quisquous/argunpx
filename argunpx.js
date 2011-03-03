@@ -1,3 +1,6 @@
+// Copyright (c) 2011 Google, Inc. All rights reserved.
+// Use of this source code is governed by the Nethack General Public License.
+
 var argunpx = function() {
     function log(str) {
         console.log(str);

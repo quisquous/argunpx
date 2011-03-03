@@ -1,3 +1,6 @@
+// Copyright (c) 2011 Google, Inc. All rights reserved.
+// Use of this source code is governed by the Nethack General Public License.
+
 argunpx.loader = function() {
     var tileSheetSrc = "nhtiles.png";
     var tileSheet = new Image();

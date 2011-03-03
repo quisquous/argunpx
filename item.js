@@ -1,3 +1,6 @@
+// Copyright (c) 2011 Google, Inc. All rights reserved.
+// Use of this source code is governed by the Nethack General Public License.
+
 argunpx.item = function() {
     function Item() {
         this.tile = argunpx.display.tile.item_unknown;
